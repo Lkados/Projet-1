@@ -1,0 +1,19 @@
+<div class="chart-container">
+  <div *ngIf="country" class="card">
+    <h2>{{ country.country }}</h2>
+    <p>Number of Entries : {{ country.participations.length }}</p>
+    <p>Total number medals : {{ getTotalMedalsCount() }}</p>
+    <p>Total number of athletes : {{ getTotalAthletesCount() }}</p>
+  </div>
+  <ngx-charts-bar-vertical
+    [results]="chartData$ | async"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    xAxisLabel="Year"
+    yAxisLabel="Total of medals">
+  </ngx-charts-bar-vertical>
+  <button (click)="goBack()" class="button">HOME</button>
+</div>

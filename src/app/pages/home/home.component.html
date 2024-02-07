@@ -1,3 +1,14 @@
-<h2>Olympic games app</h2>
-<hr />
-<p>{{ (olympics$ | async)?.length }} data loaded</p>
+<div class="chart-container">
+  <h2>Nombre de médailles par pays</h2>
+  <ngx-charts-bar-vertical
+    [results]="graphData$ | async"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    xAxisLabel="Pays"
+    yAxisLabel="Nombre de médailles"
+    (select)="onBarClick($event)">
+  </ngx-charts-bar-vertical>
+</div>

@@ -1,31 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import {CountryData} from "../models/Olympic";
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class OlympicService {
   private olympicUrl = './assets/mock/olympic.json';
-  private olympics$ = new BehaviorSubject<any>(undefined);
+  private olympics$ = new BehaviorSubject<CountryData[] | null>(null);
 
   constructor(private http: HttpClient) {}
 
-  loadInitialData() {
-    return this.http.get<any>(this.olympicUrl).pipe(
-      tap((value) => this.olympics$.next(value)),
-      catchError((error, caught) => {
-        // TODO: improve error handling
-        console.error(error);
-        // can be useful to end loading state and let the user know something went wrong
-        this.olympics$.next(null);
-        return caught;
+  loadInitialData(): Observable<CountryData[] | null> {
+    return this.http.get<CountryData[]>(this.olympicUrl).pipe(
+      tap((data: CountryData[]) => this.olympics$.next(data)),
+      catchError((error) => {
+        console.error('Error loading the olympic data:', error);
+        this.olympics$.next([]); // Utiliser un tableau vide pour éviter les problèmes si les données ne sont pas chargées
+        return of(null); // Retourne un Observable qui émet null
       })
     );
   }
 
-  getOlympics() {
+  getOlympics(): Observable<CountryData[] | null> {
     return this.olympics$.asObservable();
   }
 }
